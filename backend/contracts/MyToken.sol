@@ -20,7 +20,6 @@ contract MyToken is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
         _setTokenURI(tokenId, uri);
     }
 
-    // The following functions are overrides required by Solidity.
 
     function tokenURI(uint256 tokenId)
         public
