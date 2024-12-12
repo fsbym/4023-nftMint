@@ -5,10 +5,10 @@ module.exports = {
   solidity: {
     compilers: [
       {
-        version: "0.8.20", // Updated to match the required version
+        version: "0.8.20", 
       },
       {
-        version: "0.8.19", // Included in case some contracts require this version
+        version: "0.8.19", 
       },
     ],
   },
