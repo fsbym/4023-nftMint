@@ -50,24 +50,30 @@ contract VRFD5 is VRFConsumerBaseV2Plus {
     // Request randomness
     // Note: if the VRF response is delayed, do not repeatedly call requestRandomness
     
-    function requestNumber() public returns (uint256 requestId) {
-        require(s_result == 0, "A random number has already been requested.");
-        // this will revert if the subscription has not been created and adequately funded
-        requestId = s_vrfCoordinator.requestRandomWords(
-            VRFV2PlusClient.RandomWordsRequest({
-                keyHash: s_keyHash,
-                subId: s_subscriptionId,
-                requestConfirmations: requestConfirmations,
-                callbackGasLimit: callbackGasLimit,
-                numWords: numWords,
-                extraArgs: VRFV2PlusClient._argsToBytes(
-                    // set the native payment to true to fund randomness requests with ETH instead of the default LINK
-                    VRFV2PlusClient.ExtraArgsV1({nativePayment: false})
-                )
-            })
-        );
-        s_result = REQUEST_IN_PROGRESS;
-    }
+   function requestNumber() public returns (uint256 requestId) {
+    // Ensure the current randomness has been consumed before requesting a new one
+    require(s_result == 0 || s_result != REQUEST_IN_PROGRESS, "A random number is already being processed or hasn't been consumed.");
+
+    // Request randomness
+    requestId = s_vrfCoordinator.requestRandomWords(
+        VRFV2PlusClient.RandomWordsRequest({
+            keyHash: s_keyHash,
+            subId: s_subscriptionId,
+            requestConfirmations: requestConfirmations,
+            callbackGasLimit: callbackGasLimit,
+            numWords: numWords,
+            extraArgs: VRFV2PlusClient._argsToBytes(
+                VRFV2PlusClient.ExtraArgsV1({nativePayment: false})
+            )
+        })
+    );
+    s_result = REQUEST_IN_PROGRESS; // Update state to indicate request in progress
+}
+ function resetRequest() public {
+    require(s_result != REQUEST_IN_PROGRESS, "Randomness request is still in progress.");
+    s_result = 0; // Reset the state to allow a new request
+}
+
 
     // callback function used by VRF Coordinator to return random number to the contract
     // randomWords uint256[] is the random result returned by the Oracle
@@ -76,18 +82,19 @@ contract VRFD5 is VRFConsumerBaseV2Plus {
         s_result = d5Value;
     }
    
-    function getMetadata() public view returns (string memory) {
-        require(s_result != 0, "Random number not requested yet.");
-        require(s_result != REQUEST_IN_PROGRESS, "In progress...Fetching randomness...");
-        
-        // Updated IPFS metadata URLs
-        string[5] memory Metadata = [
-            "https://amaranth-hidden-mastodon-476.mypinata.cloud/ipfs/bafkreifhwpmaokn62mo26vp5wim7xcb47nm7herjtvudpm6hhunh36vh6e",
-            "https://amaranth-hidden-mastodon-476.mypinata.cloud/ipfs/bafkreibkr3gcwvdqa24ntoal2jrddoye5yxzrzxcvr3paitugxj6usegm4",
-            "https://amaranth-hidden-mastodon-476.mypinata.cloud/ipfs/bafkreifb4fpmytjcf77hb3s5hk5gmxq7ztqozjpjtz7dygipx66vkef4dq",
-            "https://amaranth-hidden-mastodon-476.mypinata.cloud/ipfs/bafkreifv7h34khg6q5lwgzfhekb6vapvm4q6zwhb5bjdz23ysjstopwqai",
-            "https://amaranth-hidden-mastodon-476.mypinata.cloud/ipfs/bafkreie4c7je7fbgr5g63jqpj7bikfjm2bfzofbhpe4g3z6xrzcryrt36y"
-        ];
-        return Metadata[s_result - 1];
-    }
+   function getMetadata() public view returns (string memory) {
+    require(s_result != 0, "Random number has not been requested yet.");
+    require(s_result != REQUEST_IN_PROGRESS, "Randomness is still being fetched. Please wait.");
+
+    // Metadata IPFS URLs
+    string[5] memory Metadata = [
+        "https://coral-academic-skunk-554.mypinata.cloud/ipfs/bafkreifhwpmaokn62mo26vp5wim7xcb47nm7herjtvudpm6hhunh36vh6e",
+        "https://coral-academic-skunk-554.mypinata.cloud/ipfs/bafkreifv7h34khg6q5lwgzfhekb6vapvm4q6zwhb5bjdz23ysjstopwqai",
+        "https://coral-academic-skunk-554.mypinata.cloud/ipfs/bafkreifb4fpmytjcf77hb3s5hk5gmxq7ztqozjpjtz7dygipx66vkef4dq",
+        "https://coral-academic-skunk-554.mypinata.cloud/ipfs/bafkreibkr3gcwvdqa24ntoal2jrddoye5yxzrzxcvr3paitugxj6usegm4",
+        "https://coral-academic-skunk-554.mypinata.cloud/ipfs/bafkreie4c7je7fbgr5g63jqpj7bikfjm2bfzofbhpe4g3z6xrzcryrt36y"
+    ];
+    return Metadata[s_result - 1];
+}
+
 }
