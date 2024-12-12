@@ -5,37 +5,31 @@ import { BrowserProvider, Contract } from 'ethers';
 import vrfAbi from './abis/vrfAbi.json';
 import myTokenAbi from './abis/myTokenAbi.json';
 
-// Contract addresses for Sepolia network (update these after deployment)
-const VRFD5_CONTRACT_ADDRESS = '0xbAfDB26723B56635982703419e3A023084075292'; // VRFD5 Contract Address
-const MYTOKEN_CONTRACT_ADDRESS = '0x7D5BE3bB9E7bC18194929D8641aeD44d7cB6d2D0'; // MyToken Contract Address
+const VRFD5_CONTRACT_ADDRESS = '0xbAfDB26723B56635982703419e3A023084075292';
+const MYTOKEN_CONTRACT_ADDRESS = '0x7D5BE3bB9E7bC18194929D8641aeD44d7cB6d2D0';
 
 function App() {
   const [currentAccount, setCurrentAccount] = useState(null);
   const [message, setMessage] = useState('');
 
-  // Check if Metamask is installed and connected
   const checkWalletIsConnected = async () => {
     const { ethereum } = window;
 
     if (!ethereum) {
       setMessage('🦊 Please install Metamask to interact with this application.');
       return;
-    } else {
-      setMessage('✅ Metamask is installed.');
     }
 
     const accounts = await ethereum.request({ method: 'eth_accounts' });
 
     if (accounts.length !== 0) {
-      const account = accounts[0];
-      setCurrentAccount(account);
+      setCurrentAccount(accounts[0]);
       setMessage('✅ Wallet connected.');
     } else {
       setMessage('❌ No authorized account found.');
     }
   };
 
-  // Connect to Metamask wallet
   const connectWalletHandler = async () => {
     const { ethereum } = window;
 
@@ -53,7 +47,6 @@ function App() {
     }
   };
 
-  // Request metadata from VRFD5 contract
   const requestMetadataHandler = async () => {
     try {
       const { ethereum } = window;
@@ -61,30 +54,55 @@ function App() {
       if (ethereum) {
         const provider = new BrowserProvider(ethereum);
         const signer = await provider.getSigner();
+        const vrfContract = new Contract(VRFD5_CONTRACT_ADDRESS, vrfAbi, signer);
 
-        const vrfContract = new Contract(
-          VRFD5_CONTRACT_ADDRESS,
-          vrfAbi,
-          signer
-        );
+        const currentState = await vrfContract.s_result();
+        if (currentState.toString() === '42') {
+          setMessage('⏳ Randomness request is in progress. Please wait.');
+          return;
+        }
+
+        if (currentState.toString() !== '0') {
+          setMessage('⚠️ Random number already generated. Reset required.');
+          return;
+        }
 
         setMessage('Requesting metadata from VRFD5 contract...');
-
         const tx = await vrfContract.requestNumber();
         await tx.wait();
 
-        const metadata = await vrfContract.getMetadata();
-        setMessage(`🎉 Metadata URL: ${metadata}`);
+        setMessage('✅ Randomness requested. Please fetch metadata.');
       } else {
         setMessage('❌ Ethereum object not found.');
       }
     } catch (err) {
       console.error('Error requesting metadata:', err);
-      setMessage('❌ Error requesting metadata.');
+      setMessage('❌ Error requesting metadata. Check console for details.');
     }
   };
 
-  // Mint NFT using MyToken contract
+  const resetRequestHandler = async () => {
+    try {
+      const { ethereum } = window;
+
+      if (ethereum) {
+        const provider = new BrowserProvider(ethereum);
+        const signer = await provider.getSigner();
+        const vrfContract = new Contract(VRFD5_CONTRACT_ADDRESS, vrfAbi, signer);
+
+        const tx = await vrfContract.resetRequest();
+        await tx.wait();
+
+        setMessage('✅ Request state has been reset.');
+      } else {
+        setMessage('❌ Ethereum object not found.');
+      }
+    } catch (err) {
+      console.error('Error resetting request:', err);
+      setMessage('❌ Error resetting request. Check console for details.');
+    }
+  };
+
   const mintNftHandler = async () => {
     try {
       const { ethereum } = window;
@@ -93,33 +111,17 @@ function App() {
         const provider = new BrowserProvider(ethereum);
         const signer = await provider.getSigner();
 
-        const myTokenContract = new Contract(
-          MYTOKEN_CONTRACT_ADDRESS,
-          myTokenAbi,
-          signer
-        );
-
-        setMessage('Fetching metadata from VRFD5 contract...');
-
-        // Fetch metadata from VRFD5 contract
-        const vrfContract = new Contract(
-          VRFD5_CONTRACT_ADDRESS,
-          vrfAbi,
-          signer
-        );
-
+        const vrfContract = new Contract(VRFD5_CONTRACT_ADDRESS, vrfAbi, signer);
         const metadata = await vrfContract.getMetadata();
-        setMessage(`Metadata URL fetched: ${metadata}`);
 
+        const myTokenContract = new Contract(MYTOKEN_CONTRACT_ADDRESS, myTokenAbi, signer);
         setMessage('Minting NFT...');
 
-        // Mint NFT
         const tx = await myTokenContract.safeMint(
-          currentAccount, // Mint to current user's wallet
-          Date.now(), // Use a unique token ID (timestamp)
-          metadata // Metadata URL from VRFD5
+          currentAccount,
+          Date.now(),
+          metadata
         );
-
         await tx.wait();
 
         setMessage(`🎉 NFT minted successfully! Transaction: ${tx.hash}`);
@@ -128,32 +130,27 @@ function App() {
       }
     } catch (err) {
       console.error('Error minting NFT:', err);
-      setMessage('❌ Error minting NFT.');
+      setMessage('❌ Error minting NFT. Check console for details.');
     }
   };
 
-  // Render connect wallet button
   const connectWalletButton = () => (
-    <button
-      onClick={connectWalletHandler}
-      className="cta-button connect-wallet-button"
-    >
+    <button onClick={connectWalletHandler} className="cta-button connect-wallet-button">
       Connect Wallet
     </button>
   );
 
-  // Render mint NFT button
-  const mintNftButton = () => (
+  const actionButtons = () => (
     <div>
       <h3 className="text-style">🦊 Account Address: {currentAccount}</h3>
-      <button
-        onClick={requestMetadataHandler}
-        className="cta-button request-metadata-button"
-      >
+      <button onClick={requestMetadataHandler} className="cta-button request-metadata-button">
         Request Metadata
       </button>
       <button onClick={mintNftHandler} className="cta-button mint-nft-button">
         Mint NFT
+      </button>
+      <button onClick={resetRequestHandler} className="cta-button reset-button">
+        Reset Request
       </button>
     </div>
   );
@@ -167,12 +164,12 @@ function App() {
       <div className="header">
         <h3 className="text-color">Sepolia NFT Minter</h3>
       </div>
-      <hr></hr>
+      <hr />
       <div className="container">
-        {currentAccount ? mintNftButton() : connectWalletButton()}
+        {currentAccount ? actionButtons() : connectWalletButton()}
       </div>
       <div>
-        <hr></hr>
+        <hr />
         <h4>{message}</h4>
       </div>
     </div>

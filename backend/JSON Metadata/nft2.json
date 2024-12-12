@@ -1,19 +1,20 @@
 {
     "name": "Abstract NFT #2",
     "description": "A dynamic NFT artwork featuring colorful gradients and geometric patterns.",
-    "image": "https://coral-academic-skunk-554.mypinata.cloud/files/bafybeieqn46oip574cenpohh65kzaub3fslzy4pjewf4ascx6ixndp5wem?X-Algorithm=PINATA1&X-Date=1734030993&X-Expires=30&X-Method=GET&X-Signature=bdcaa01b69c52b75cd70d6431050976184d431c19d436590d20d033ceb408f24",
+    "image": "https://aquamarine-fascinating-guan-567.mypinata.cloud/ipfs/bafybeicsrih4zf22enoqpqmtx3ho2uh7uhmat3qryrtspyuuzt6gr4hwbe",
     "attributes": [
-        {
-            "trait_type": "Primary Color",
-            "value": "Pink"
-        },
-        {
-            "trait_type": "Style",
-            "value": "Futuristic"
-        },
-        {
-            "trait_type": "Shape",
-            "value": "Triangle"
-        }
+      {
+        "trait_type": "Primary Color",
+        "value": "Pink"
+      },
+      {
+        "trait_type": "Style",
+        "value": "Futuristic"
+      },
+      {
+        "trait_type": "Shape",
+        "value": "Triangle"
+      }
     ]
-}
+  }
+  

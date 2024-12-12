@@ -1,19 +1,20 @@
 {
-    "name": "Abstract NFT #1",
-    "description": "An abstract NFT design with vibrant, modern patterns and geometric shapes.",
-    "image": "https://coral-academic-skunk-554.mypinata.cloud/files/bafybeifec2xo7yutcjfompisccnkgpzkt43v5c6amtgnwmw643lw3bkwci?X-Algorithm=PINATA1&X-Date=1734030953&X-Expires=30&X-Method=GET&X-Signature=a40cab61936d20f630fc928c954911f25cf42612d08f8612351ce5de6812f56b",
+    "name": "Abstract NFT #5",
+    "description": "An abstract NFT design with singular strokes and circular shapes.",
+    "image": "https://aquamarine-fascinating-guan-567.mypinata.cloud/ipfs/bafybeieqn46oip574cenpohh65kzaub3fslzy4pjewf4ascx6ixndp5wem",
     "attributes": [
-        {
-            "trait_type": "Primary Color",
-            "value": "Purple"
-        },
-        {
-            "trait_type": "Style",
-            "value": "Abstract"
-        },
-        {
-            "trait_type": "Shape",
-            "value": "Circle"
-        }
+      {
+        "trait_type": "Primary Color",
+        "value": "Black"
+      },
+      {
+        "trait_type": "Style",
+        "value": "Abstract"
+      },
+      {
+        "trait_type": "Shape",
+        "value": "Sphere"
+      }
     ]
-}
+  }
+  
