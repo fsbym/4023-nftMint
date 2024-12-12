@@ -6,7 +6,6 @@ pragma solidity ^0.8.19;
 import {VRFConsumerBaseV2Plus} from "@chainlink/contracts/src/v0.8/vrf/dev/VRFConsumerBaseV2Plus.sol";
 import {VRFV2PlusClient} from "@chainlink/contracts/src/v0.8/vrf/dev/libraries/VRFV2PlusClient.sol";
 
-
 // After the contract asks for randomness from Chainlink VRF, the result will be converted into a number
 // between 1 and 5 which will be used to select a json file stored on IPFS that stores NFT metadata.
 
@@ -80,12 +79,14 @@ contract VRFD5 is VRFConsumerBaseV2Plus {
     function getMetadata() public view returns (string memory) {
         require(s_result != 0, "Random number not requested yet.");
         require(s_result != REQUEST_IN_PROGRESS, "In progress...Fetching randomness...");
+        
+        // Updated IPFS metadata URLs
         string[5] memory Metadata = [
-            "https://amaranth-hidden-mastodon-476.mypinata.cloud/ipfs/bafkreieemrrtt2gqf2pqbuiiix2jjaj5yydnkkgbn6bkoxvfdqf54wrymm",
-            "https://amaranth-hidden-mastodon-476.mypinata.cloud/ipfs/bafkreidqugfsxpayk7eyglehh7jtik4hgfdi5xjujrc7x453dy7tqxtuhy",
-            "https://amaranth-hidden-mastodon-476.mypinata.cloud/ipfs/bafkreic7jpftx6vpe4loa3ywivrzibw7eqdf3gsldqkqm3esc25fjvmexq",
-            "https://amaranth-hidden-mastodon-476.mypinata.cloud/ipfs/bafkreictvszyojyouoqkrojcxevch3fkfvpfrqcj63alpmbvv557mzm4sq",
-            "https://amaranth-hidden-mastodon-476.mypinata.cloud/ipfs/bafkreidzdbpcmd34dgvh75myydhdxzhhly5gantudkxdvax22y5eoixpy4"           
+            "https://amaranth-hidden-mastodon-476.mypinata.cloud/ipfs/bafkreifhwpmaokn62mo26vp5wim7xcb47nm7herjtvudpm6hhunh36vh6e",
+            "https://amaranth-hidden-mastodon-476.mypinata.cloud/ipfs/bafkreibkr3gcwvdqa24ntoal2jrddoye5yxzrzxcvr3paitugxj6usegm4",
+            "https://amaranth-hidden-mastodon-476.mypinata.cloud/ipfs/bafkreifb4fpmytjcf77hb3s5hk5gmxq7ztqozjpjtz7dygipx66vkef4dq",
+            "https://amaranth-hidden-mastodon-476.mypinata.cloud/ipfs/bafkreifv7h34khg6q5lwgzfhekb6vapvm4q6zwhb5bjdz23ysjstopwqai",
+            "https://amaranth-hidden-mastodon-476.mypinata.cloud/ipfs/bafkreie4c7je7fbgr5g63jqpj7bikfjm2bfzofbhpe4g3z6xrzcryrt36y"
         ];
         return Metadata[s_result - 1];
     }

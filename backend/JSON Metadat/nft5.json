@@ -1,0 +1,19 @@
+{
+    "name": "Abstract NFT #5",
+    "description": "An abstract NFT design with singular strokes and circular shapes.",
+    "image": "bafkreidmmhj3pc4vstcrmfnonm4b5vttsaidsidhh6azsf2pdii4kw6qga",
+    "attributes": [
+        {
+            "trait_type": "Primary Color",
+            "value": "Black"
+        },
+        {
+            "trait_type": "Style",
+            "value": "Abstract"
+        },
+        {
+            "trait_type": "Shape",
+            "value": "Sphere"
+        }
+    ]
+}

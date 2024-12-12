@@ -1,0 +1,19 @@
+{
+    "name": "Abstract NFT #1",
+    "description": "An abstract NFT design with vibrant, modern patterns and geometric shapes.",
+    "image": "bafybeifec2xo7yutcjfompisccnkgpzkt43v5c6amtgnwmw643lw3bkwci",
+    "attributes": [
+        {
+            "trait_type": "Primary Color",
+            "value": "Purple"
+        },
+        {
+            "trait_type": "Style",
+            "value": "Abstract"
+        },
+        {
+            "trait_type": "Shape",
+            "value": "Circle"
+        }
+    ]
+}

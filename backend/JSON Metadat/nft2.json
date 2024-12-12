@@ -1,0 +1,19 @@
+{
+    "name": "Abstract NFT #2",
+    "description": "A dynamic NFT artwork featuring colorful gradients and geometric patterns.",
+    "image": "bafybeieqn46oip574cenpohh65kzaub3fslzy4pjewf4ascx6ixndp5wem",
+    "attributes": [
+        {
+            "trait_type": "Primary Color",
+            "value": "Pink"
+        },
+        {
+            "trait_type": "Style",
+            "value": "Futuristic"
+        },
+        {
+            "trait_type": "Shape",
+            "value": "Triangle"
+        }
+    ]
+}
