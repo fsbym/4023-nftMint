@@ -1,19 +1,19 @@
 {
-    "name": "Abstract NFT #3",
-    "description": "A sleek NFT artwork with overlapping circular and square shapes.",
-    "image": "bafybeibvycsknrjaozog42rkjssin3eosy7agu62fkcvzrwlgrrumlpllu",
-    "attributes": [
-        {
-            "trait_type": "Primary Color",
-            "value": "Teal"
-        },
-        {
-            "trait_type": "Style",
-            "value": "Gradient"
-        },
-        {
-            "trait_type": "Shape",
-            "value": "Hexagon"
-        }
-    ]
+  "name": "Abstract NFT #3",
+  "description": "A sleek NFT artwork with overlapping circular and square shapes.",
+  "image": "https://aquamarine-fascinating-guan-567.mypinata.cloud/ipfs/bafybeifec2xo7yutcjfompisccnkgpzkt43v5c6amtgnwmw643lw3bkwci",
+  "attributes": [
+    {
+      "trait_type": "Primary Color",
+      "value": "Teal"
+    },
+    {
+      "trait_type": "Style",
+      "value": "Gradient"
+    },
+    {
+      "trait_type": "Shape",
+      "value": "Hexagon"
+    }
+  ]
 }

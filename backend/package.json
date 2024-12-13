@@ -6,7 +6,7 @@
     "chai": "^5.1.2",
     "dotenv": "^16.4.7",
     "ethereum-waffle": "^4.0.10",
-    "ethers": "^6.13.4",
+    "ethers": "^6.1.0",
     "hardhat": "^2.22.17"
   },
   "dependencies": {

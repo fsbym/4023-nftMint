@@ -1,23 +1,23 @@
 {
-    "name": "Ethereal Justice",
-    "description": "A divine representation of justice, harmony, and balance, featuring ethereal figures adorned with golden scales and radiant halos in a celestial background.",
-    "image": "bafybeicsrih4zf22enoqpqmtx3ho2uh7uhmat3qryrtspyuuzt6gr4hwbe",
-    "attributes": [
-        {
-            "trait_type": "Theme",
-            "value": "Divine Justice"
-        },
-        {
-            "trait_type": "Color Scheme",
-            "value": "Gold and Blue"
-        },
-        {
-            "trait_type": "Art Style",
-            "value": "Futuristic Ethereal"
-        },
-        {
-            "trait_type": "Elements",
-            "value": "Scales of Justice"
-        }
-    ]
+  "name": "Ethereal Justice",
+  "description": "A divine representation of justice, harmony, and balance, featuring ethereal figures adorned with golden scales and radiant halos in a celestial background.",
+  "image": "https://aquamarine-fascinating-guan-567.mypinata.cloud/ipfs/bafybeibvycsknrjaozog42rkjssin3eosy7agu62fkcvzrwlgrrumlpllu",
+  "attributes": [
+    {
+      "trait_type": "Theme",
+      "value": "Divine Justice"
+    },
+    {
+      "trait_type": "Color Scheme",
+      "value": "Gold and Blue"
+    },
+    {
+      "trait_type": "Art Style",
+      "value": "Futuristic Ethereal"
+    },
+    {
+      "trait_type": "Elements",
+      "value": "Scales of Justice"
+    }
+  ]
 }
