@@ -6,23 +6,12 @@ import { BrowserProvider, Contract } from "ethers";
 import vrfData from "./abis/vrfAbi.json";
 import myTokenData from "./abis/myTokenAbi.json";
 
-// Debugging: Log imported ABI data
-console.log("VRF ABI Raw Data:", vrfData);
-console.log("MyToken ABI Raw Data:", myTokenData);
-
 // Determine if ABI is nested under an "abi" key or is a standalone array
 const vrfAbi = vrfData.abi ? vrfData.abi : vrfData;
 const myTokenAbi = myTokenData.abi ? myTokenData.abi : myTokenData;
 
-// Debugging: Verify if ABIs are arrays
-console.log("VRF ABI:", vrfAbi);
-console.log("Is VRF ABI an Array?", Array.isArray(vrfAbi));
-
-console.log("MyToken ABI:", myTokenAbi);
-console.log("Is MyToken ABI an Array?", Array.isArray(myTokenAbi));
-
 // Contract addresses on Sepolia Testnet
-const VRFD5_CONTRACT_ADDRESS = "0xC1c00d348A287bb7b53aCbc4b50623eC7b83c559";
+const VRFD5_CONTRACT_ADDRESS = "0x31D17056f59AD0D479dF6F2Fca9BA05B0f18bb57";
 const MYTOKEN_CONTRACT_ADDRESS = "0x61f59E147DFE46E5e64223E438ce4f722a2a7B0C";
 
 function App() {

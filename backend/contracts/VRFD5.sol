@@ -51,7 +51,6 @@ contract VRFD5 is VRFConsumerBaseV2Plus {
      */
     function requestNumber() public returns (uint256 requestId) {
         require(s_result != REQUEST_IN_PROGRESS, "A random number request is already in progress.");
-        require(s_result == 0, "A random number has already been generated.");
 
         // Request randomness from Chainlink VRF
         requestId = s_vrfCoordinator.requestRandomWords(
