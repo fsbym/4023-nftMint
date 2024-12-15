@@ -12,7 +12,7 @@ const myTokenAbi = myTokenData.abi ? myTokenData.abi : myTokenData;
 
 // Contract addresses on Sepolia Testnet
 const VRFD5_CONTRACT_ADDRESS = "0x31D17056f59AD0D479dF6F2Fca9BA05B0f18bb57";
-const MYTOKEN_CONTRACT_ADDRESS = "0x6125620e31746A0EB0b6D1657a00D7F3Ad614813";
+const MYTOKEN_CONTRACT_ADDRESS = "0x1AaD2aeD79C4f3698f05e969187A9b830f2E049C";
 
 function App() {
   const [currentAccount, setCurrentAccount] = useState(null);
@@ -214,6 +214,7 @@ function App() {
         vrfAbi,
         provider
       );
+      console.log("📡 Calling getMetadata() on VRFD5 contract...");
       const metadata = await vrfContract.getMetadata();
       console.log("Fetched Metadata URL:", metadata);
       return metadata;

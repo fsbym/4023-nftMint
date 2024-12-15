@@ -8,13 +8,12 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract MyToken is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
     constructor(address initialOwner)
-        ERC721("NumbersOnJupiterToken", "NJTK")
+        ERC721("OrdoToken", "O")
         Ownable(initialOwner)
     {}
 
     function safeMint(address to, uint256 tokenId, string memory uri)
         public
-        onlyOwner
     {
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
