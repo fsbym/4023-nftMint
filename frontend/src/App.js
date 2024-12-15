@@ -12,7 +12,7 @@ const myTokenAbi = myTokenData.abi ? myTokenData.abi : myTokenData;
 
 // Contract addresses on Sepolia Testnet
 const VRFD5_CONTRACT_ADDRESS = "0x31D17056f59AD0D479dF6F2Fca9BA05B0f18bb57";
-const MYTOKEN_CONTRACT_ADDRESS = "0x61f59E147DFE46E5e64223E438ce4f722a2a7B0C";
+const MYTOKEN_CONTRACT_ADDRESS = "0x6125620e31746A0EB0b6D1657a00D7F3Ad614813";
 
 function App() {
   const [currentAccount, setCurrentAccount] = useState(null);
