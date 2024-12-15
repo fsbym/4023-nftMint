@@ -117,6 +117,7 @@ function App() {
           myTokenAbi,
           signer
         );
+        console.log("metadata", metadata);
 
         const txMint = await myTokenContract.safeMint(
           currentAccount,

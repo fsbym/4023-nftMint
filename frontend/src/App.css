@@ -2,30 +2,33 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #1e1e2f; /* Dark background */
-  color: #ffffff; /* White text color */
-  text-align: center;
+  background-color: #f0f0f0; /* Light background */
+  color: #333333; /* Dark text color */
+  display: flex; /* Center container horizontally & vertically */
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Fill viewport height */
+  text-align: center; /* Center text */
 }
 
 .main-app {
-  margin: 0 auto;
+  background-color: #ffffff; /* White container */
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   padding: 20px;
   max-width: 600px;
-  text-align: center;
-  background-color: #292b3a;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  margin: 0 auto;
 }
 
 h1 {
   font-size: 2.5rem;
-  color: #61dafb; /* Light blue for the main title */
+  color: #1976d2; /* A bright blue for the main title */
   margin-bottom: 20px;
 }
 
 p {
   font-size: 1rem;
-  color: #b0b0d0;
+  color: #555555; /* Gray text */
   margin-bottom: 20px;
   word-wrap: break-word;
 }
@@ -38,7 +41,7 @@ button {
   font-size: 1rem;
   font-weight: bold;
   color: #ffffff;
-  background-color: #0078d4; /* Blue button */
+  background-color: #1976d2; /* Blue button */
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -46,22 +49,23 @@ button {
 }
 
 button:hover {
-  background-color: #005ea6; /* Darker blue on hover */
+  background-color: #1565c0; /* Darker blue on hover */
   transform: scale(1.05);
 }
 
 button:disabled {
-  background-color: #555; /* Gray for disabled buttons */
+  background-color: #cccccc; /* Gray for disabled buttons */
   cursor: not-allowed;
   opacity: 0.7;
 }
 
+/* The first button can have a different color */
 button:first-child {
-  background-color: #ffa500; /* Orange for the first button */
+  background-color: #ff9800; /* Orange */
 }
 
 button:first-child:hover {
-  background-color: #cc8400; /* Darker orange on hover */
+  background-color: #e68900; /* Darker orange on hover */
 }
 
 /* Responsive design */
@@ -91,6 +95,6 @@ p.error-message {
 p.current-account {
   font-size: 1rem;
   font-weight: bold;
-  color: #61dafb; /* Light blue */
+  color: #1976d2; /* Blue highlight for the current account */
   margin-top: 10px;
 }
