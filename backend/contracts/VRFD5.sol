@@ -45,7 +45,6 @@ contract VRFD5 is VRFConsumerBaseV2Plus {
         s_subscriptionId = subscriptionId;
     }
 
-<<<<<<< HEAD
     /**
      * @dev Requests a random number from Chainlink VRF
      * @return requestId The ID of the VRF request
@@ -69,35 +68,6 @@ contract VRFD5 is VRFConsumerBaseV2Plus {
         );
         s_result = REQUEST_IN_PROGRESS;
     }
-=======
-    // Request randomness
-    // Note: if the VRF response is delayed, do not repeatedly call requestRandomness
-    
-   function requestNumber() public returns (uint256 requestId) {
-    // Ensure the current randomness has been consumed before requesting a new one
-    require(s_result == 0 || s_result != REQUEST_IN_PROGRESS, "A random number is already being processed or hasn't been consumed.");
-
-    // Request randomness
-    requestId = s_vrfCoordinator.requestRandomWords(
-        VRFV2PlusClient.RandomWordsRequest({
-            keyHash: s_keyHash,
-            subId: s_subscriptionId,
-            requestConfirmations: requestConfirmations,
-            callbackGasLimit: callbackGasLimit,
-            numWords: numWords,
-            extraArgs: VRFV2PlusClient._argsToBytes(
-                VRFV2PlusClient.ExtraArgsV1({nativePayment: false})
-            )
-        })
-    );
-    s_result = REQUEST_IN_PROGRESS; // Update state to indicate request in progress
-}
- function resetRequest() public {
-    require(s_result != REQUEST_IN_PROGRESS, "Randomness request is still in progress.");
-    s_result = 0; // Reset the state to allow a new request
-}
-
->>>>>>> c8c11f839b4a98c3a31031b6d2920f3c4847ec7b
 
     /**
      * @dev Callback function used by VRF Coordinator to return the random number
@@ -109,7 +79,6 @@ contract VRFD5 is VRFConsumerBaseV2Plus {
         s_result = d5Value;
         emit RandomNumberFulfilled(s_result);
     }
-<<<<<<< HEAD
 
     /**
      * @dev Retrieves the metadata URL based on the generated random number
@@ -138,22 +107,3 @@ contract VRFD5 is VRFConsumerBaseV2Plus {
         s_result = 0;
     }
 }
-=======
-   
-   function getMetadata() public view returns (string memory) {
-    require(s_result != 0, "Random number has not been requested yet.");
-    require(s_result != REQUEST_IN_PROGRESS, "Randomness is still being fetched. Please wait.");
-
-    // Metadata IPFS URLs
-    string[5] memory Metadata = [
-        "https://aquamarine-fascinating-guan-567.mypinata.cloud/ipfs/bafkreiccz2c2fqangyi24rd5beja5yypzwzsfxiuxtcikvmdq2n5cjonoe",
-        "https://aquamarine-fascinating-guan-567.mypinata.cloud/ipfs/bafkreiar2u4v7enhqitcc5nggu6p5oykhayjwbxidclaigeon3gjymxo2m",
-        "https://aquamarine-fascinating-guan-567.mypinata.cloud/ipfs/bafkreiazowf6c7ci4g34j5lamggfnuuefrg2iewidwbgo5nsr22fivahvm",
-        "https://aquamarine-fascinating-guan-567.mypinata.cloud/ipfs/bafkreictslpu6qot2blia6lywml734zi46isrxej7m4ordqbphc4fwukba",
-        "https://aquamarine-fascinating-guan-567.mypinata.cloud/ipfs/bafkreie7vhbvd3s3kbxmi7wuialxoezdzabfatzuhbdnpbd4vomvwnorj4"
-    ];
-    return Metadata[s_result - 1];
-}
-
-}
->>>>>>> c8c11f839b4a98c3a31031b6d2920f3c4847ec7b
