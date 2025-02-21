@@ -9,11 +9,14 @@
     "contract-name-camelcase": "error",
     "const-name-snakecase": "error",
     "func-name-mixedcase": "error",
-    "var-name-mixedcase": "error",
     "imports-on-top": "error",
     "visibility-modifier-order": "error",
     "avoid-low-level-calls": "warn",
     "reentrancy": "error",
-    "state-visibility": "error"
+    "state-visibility": "error",
+    "no-global-import": "off",
+    "var-name-mixedcase": "off",
+    "reason-string": "off",
+    "custom-errors": "off"
   }
 }
