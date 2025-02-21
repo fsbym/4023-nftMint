@@ -11,8 +11,3 @@ async function main() {
   const contractAddress = await myToken.getAddress();
   console.log("MyToken deployed to:", contractAddress);
 }
-
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});

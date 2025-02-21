@@ -9,10 +9,8 @@ describe("MyToken Contract", function () {
   let addr2;
 
   beforeEach(async function () {
-    // Get signers (accounts) from Hardhat
     [owner, addr1, addr2] = await ethers.getSigners();
 
-    // Deploy the contract before each test
     MyToken = await ethers.getContractFactory("MyToken");
     myToken = await MyToken.deploy(owner.address);
     await myToken.waitForDeployment();
