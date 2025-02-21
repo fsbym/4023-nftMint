@@ -32,7 +32,8 @@ jobs:
       - name: Install and run Slither
         run: |
           python3 -m pip install --user slither-analyzer
-          slither . --config-file slither.config.json
+          slither backend/contracts --config-file backend/slither.config.json
+
 
       - name: Build and test frontend
         run: |
