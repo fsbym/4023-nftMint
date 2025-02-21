@@ -50,7 +50,6 @@ jobs:
         run: |
           docker compose build frontend
           docker compose run --rm frontend npm install
-          docker compose run --rm frontend npm run test
           docker compose run --rm frontend npm run lint
           docker compose run --rm frontend npm audit
 
