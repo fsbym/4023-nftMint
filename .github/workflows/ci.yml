@@ -9,6 +9,9 @@ on:
 jobs:
   build-test:
     runs-on: ubuntu-latest
+    env:
+      ALCHEMY_SEPOLIA_URL: ${{ secrets.ALCHEMY_SEPOLIA_URL }}
+      PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
     steps:
       - uses: actions/checkout@v3
       
@@ -18,6 +21,10 @@ jobs:
       - name: Build and test backend
         run: |
           docker compose build backend
+          docker compose run --rm \
+            -e PRIVATE_KEY=${{ secrets.PRIVATE_KEY }} \
+            -e ALCHEMY_SEPOLIA_URL=${{ secrets.ALCHEMY_SEPOLIA_URL }} \
+            backend npm install
           docker compose run --rm backend npm run test
           docker compose run --rm backend npx hardhat compile
           docker compose run --rm backend npx solhint 'contracts/**/*.sol'
@@ -25,18 +32,18 @@ jobs:
       - name: Install and run Slither
         run: |
           python3 -m pip install --user slither-analyzer
-          docker compose run --rm backend slither . --config-file slither.config.json
+          slither . --config-file slither.config.json
 
       - name: Build and test frontend
         run: |
           docker compose build frontend
+          docker compose run --rm frontend npm install
           docker compose run --rm frontend npm run test
           docker compose run --rm frontend npm run lint
           docker compose run --rm frontend npm audit
 
       - name: Security check frontend
         run: |
-          docker compose run --rm frontend npm run lint
           docker compose run --rm frontend snyk test
           docker compose run --rm frontend retire
 
@@ -56,7 +63,11 @@ jobs:
             -e PRIVATE_KEY=${{ secrets.PRIVATE_KEY }} \
             -e ALCHEMY_SEPOLIA_URL=${{ secrets.ALCHEMY_SEPOLIA_URL }} \
             backend npx hardhat run scripts/deployMyToken.js --network sepolia
-          echo "MYTOKEN_CONTRACT_ADDRESS=$(docker compose run --rm backend cat deployment.txt)" >> $GITHUB_OUTPUT
+          if [ -f "deployment.txt" ]; then
+            echo "MYTOKEN_CONTRACT_ADDRESS=$(cat deployment.txt)" >> $GITHUB_ENV
+          else
+            echo "MYTOKEN_CONTRACT_ADDRESS=Deployment failed" >> $GITHUB_ENV
+          fi
 
       - name: Deploy VRFD5 to Sepolia
         run: |
@@ -64,10 +75,19 @@ jobs:
             -e PRIVATE_KEY=${{ secrets.PRIVATE_KEY }} \
             -e ALCHEMY_SEPOLIA_URL=${{ secrets.ALCHEMY_SEPOLIA_URL }} \
             backend npx hardhat run scripts/deployVRFD5.js --network sepolia
-          echo "VRFD5_CONTRACT_ADDRESS=$(docker compose run --rm backend cat deployment.txt)" >> $GITHUB_OUTPUT
+          if [ -f "deployment.txt" ]; then
+            echo "VRFD5_CONTRACT_ADDRESS=$(cat deployment.txt)" >> $GITHUB_ENV
+          else
+            echo "VRFD5_CONTRACT_ADDRESS=Deployment failed" >> $GITHUB_ENV
+          fi
+
+      - name: Debug contract address
+        run: |
+          echo "MyToken contract address: $MYTOKEN_CONTRACT_ADDRESS"
+          echo "VRFD5 contract address: $VRFD5_CONTRACT_ADDRESS"
 
       - name: Notify deployment
         if: success()
         run: |
-          echo "MyToken deployed successfully to ${{ steps.deploy.outputs.MYTOKEN_CONTRACT_ADDRESS }}"
-          echo "VRFD5 deployed successfully to ${{ steps.deploy.outputs.VRFD5_CONTRACT_ADDRESS }}"
+          echo "MyToken deployed successfully to $MYTOKEN_CONTRACT_ADDRESS"
+          echo "VRFD5 deployed successfully to $VRFD5_CONTRACT_ADDRESS"

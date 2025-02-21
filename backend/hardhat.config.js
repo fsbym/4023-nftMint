@@ -5,6 +5,15 @@ require("hardhat-gas-reporter");
 require("hardhat-contract-sizer");
 require("solidity-coverage");
 
+console.log(
+  "Sepolia RPC URL:",
+  process.env.ALCHEMY_SEPOLIA_URL ? "Exists" : "Missing"
+);
+console.log(
+  "Private Key (masked):",
+  process.env.PRIVATE_KEY ? "Exists" : "Missing"
+);
+
 module.exports = {
   solidity: {
     compilers: [
@@ -18,14 +27,14 @@ module.exports = {
   },
   networks: {
     sepolia: {
-      url: process.env.ALCHEMY_SEPOLIA_URL,
-      accounts: [`0x${process.env.PRIVATE_KEY}`],
+      url: process.env.ALCHEMY_SEPOLIA_URL || "",
+      accounts: process.env.PRIVATE_KEY ? [`0x${process.env.PRIVATE_KEY}`] : [],
     },
   },
   gasReporter: {
-    enabled: process.env.REPORT_GAS ? true : false,
+    enabled: process.env.REPORT_GAS === "true",
     currency: "USD",
-    coinmarketcap: process.env.COINMARKETCAP_API_KEY,
+    coinmarketcap: process.env.COINMARKETCAP_API_KEY || "",
     token: "ETH",
     gasPriceApi:
       "https://api.etherscan.io/api?module=proxy&action=eth_gasPrice",
