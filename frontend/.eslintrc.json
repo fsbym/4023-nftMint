@@ -1,4 +1,10 @@
 {
-  "extends": ["eslint:recommended", "plugin:security/recommended"],
-  "plugins": ["security"]
+  "extends": ["react-app", "react-app/jest", "plugin:security/recommended"],
+  "plugins": ["security"],
+  "rules": {
+    "no-unused-vars": "warn", // Warns about unused variables
+    "eqeqeq": "error", // Enforces the use of === and !==
+    "semi": ["error", "always"], // Requires semicolons at the end of statements
+    "quotes": ["error", "double"] // Enforces the use of double quotes
+  }
 }
