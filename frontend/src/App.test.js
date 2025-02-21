@@ -1,8 +1,31 @@
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import { render, screen, fireEvent } from "@testing-library/react";
+import App from "./App";
 
-test('renders learn react link', () => {
+test("renders NFT Minting App title", () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  const titleElement = screen.getByText(/NFT Minting App/i);
+  expect(titleElement).toBeInTheDocument();
+});
+
+test("connects to MetaMask when button is clicked", async () => {
+  render(<App />);
+  const connectButton = screen.getByText(/Connect Metamask Wallet/i);
+  fireEvent.click(connectButton);
+
+  // Mocking MetaMask connection
+  window.ethereum = {
+    request: jest.fn().mockResolvedValue(["0x123"]),
+  };
+
+  const connectedMessage = await screen.findByText(/Connected account/i);
+  expect(connectedMessage).toBeInTheDocument();
+});
+
+test("displays message when MetaMask is not installed", () => {
+  render(<App />);
+  const connectButton = screen.getByText(/Connect Metamask Wallet/i);
+  fireEvent.click(connectButton);
+
+  const messageElement = screen.getByText(/Please install MetaMask/i);
+  expect(messageElement).toBeInTheDocument();
 });

@@ -1,4 +1,4 @@
-name: Smart Contract CI/CD
+name: Full Stack CI/CD
 
 on:
   push:
@@ -27,25 +27,47 @@ jobs:
           python3 -m pip install --user slither-analyzer
           docker compose run --rm backend slither . --config-file slither.config.json
 
+      - name: Build and test frontend
+        run: |
+          docker compose build frontend
+          docker compose run --rm frontend npm run test
+          docker compose run --rm frontend npm run lint
+          docker compose run --rm frontend npm audit
+
+      - name: Security check frontend
+        run: |
+          docker compose run --rm frontend npm run lint
+          docker compose run --rm frontend snyk test
+          docker compose run --rm frontend retire
+
   deploy:
     needs: build-test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     steps:
       - uses: actions/checkout@v3
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Deploy to Sepolia
+      - name: Deploy MyToken to Sepolia
         run: |
           docker compose run --rm \
             -e PRIVATE_KEY=${{ secrets.PRIVATE_KEY }} \
             -e ALCHEMY_SEPOLIA_URL=${{ secrets.ALCHEMY_SEPOLIA_URL }} \
-            backend npx hardhat run scripts/deploy.js --network sepolia
-          echo "CONTRACT_ADDRESS=$(docker compose run --rm backend cat deployment.txt)" >> $GITHUB_OUTPUT
+            backend npx hardhat run scripts/deployMyToken.js --network sepolia
+          echo "MYTOKEN_CONTRACT_ADDRESS=$(docker compose run --rm backend cat deployment.txt)" >> $GITHUB_OUTPUT
+
+      - name: Deploy VRFD5 to Sepolia
+        run: |
+          docker compose run --rm \
+            -e PRIVATE_KEY=${{ secrets.PRIVATE_KEY }} \
+            -e ALCHEMY_SEPOLIA_URL=${{ secrets.ALCHEMY_SEPOLIA_URL }} \
+            backend npx hardhat run scripts/deployVRFD5.js --network sepolia
+          echo "VRFD5_CONTRACT_ADDRESS=$(docker compose run --rm backend cat deployment.txt)" >> $GITHUB_OUTPUT
 
       - name: Notify deployment
         if: success()
         run: |
-          echo "Contract deployed successfully to ${{ steps.deploy.outputs.CONTRACT_ADDRESS }}"
+          echo "MyToken deployed successfully to ${{ steps.deploy.outputs.MYTOKEN_CONTRACT_ADDRESS }}"
+          echo "VRFD5 deployed successfully to ${{ steps.deploy.outputs.VRFD5_CONTRACT_ADDRESS }}"
