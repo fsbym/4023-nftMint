@@ -35,20 +35,26 @@ function App() {
           "🦊 Please install MetaMask to interact with this application."
         );
         return;
-      } else {
-        setMessage("✅ MetaMask is installed.");
       }
 
       const provider = new BrowserProvider(ethereum);
-      const accounts = await provider.listAccounts();
-      if (accounts.length !== 0) {
-        const account = accounts[0];
-        setCurrentAccount(account);
-        setMessage(`💳 Connected account: ${account}`);
+      if (!provider) {
+        setMessage("❌ Error initializing provider");
+        return;
+      }
 
-        await checkRandomNumberReady(provider);
-      } else {
-        setMessage("🦊 Please connect your MetaMask wallet.");
+      try {
+        const accounts = await provider.listAccounts();
+        if (accounts.length !== 0) {
+          const account = accounts[0];
+          setCurrentAccount(account);
+          setMessage(`💳 Connected account: ${account}`);
+        } else {
+          setMessage("🦊 Please connect your MetaMask wallet.");
+        }
+      } catch (error) {
+        console.error("Error listing accounts:", error);
+        setMessage("⚠️ Error accessing accounts.");
       }
     } catch (error) {
       console.error("Error checking wallet connection:", error);
