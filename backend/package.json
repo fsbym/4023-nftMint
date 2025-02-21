@@ -27,5 +27,8 @@
   },
   "dependencies": {
     "@openzeppelin/contracts": "^5.1.0"
+  },
+  "scripts": {
+    "test": "echo \"No tests specified\" && exit 0"
   }
 }
