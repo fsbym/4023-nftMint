@@ -1,0 +1,91 @@
+name: NFT Smart Contract CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Compile smart contracts
+        run: npx hardhat compile
+
+      - name: Run tests with coverage
+        run: npx hardhat coverage
+
+      - name: Generate gas report
+        run: REPORT_GAS=true npx hardhat test
+        continue-on-error: true
+        env:
+          COINMARKETCAP_API_KEY: ${{ secrets.COINMARKETCAP_API_KEY }}
+
+      - name: Check contract size
+        run: npx hardhat size-contracts
+
+      - name: Run Solhint
+        run: npx solhint 'contracts/**/*.sol'
+
+      - name: Run Slither
+        uses: crytic/slither-action@v0.2.0
+        continue-on-error: true
+
+      - name: Install Mythril
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip
+          pip3 install mythril
+
+      - name: Run Mythril
+        run: myth analyze contracts/MyToken.sol --solc-json mythril.config.json
+        continue-on-error: true
+
+  deploy:
+    needs: build-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Deploy to Sepolia
+        run: |
+          npx hardhat run scripts/deploy.js --network sepolia
+          echo "CONTRACT_ADDRESS=$(cat deployment.txt)" >> $GITHUB_OUTPUT
+        env:
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          ALCHEMY_SEPOLIA_URL: ${{ secrets.ALCHEMY_SEPOLIA_URL }}
+
+      - name: Notify deployment
+        if: success()
+        run: |
+          echo "Contract deployed successfully to ${{ steps.deploy.outputs.CONTRACT_ADDRESS }}"

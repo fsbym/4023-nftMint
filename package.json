@@ -1,0 +1,17 @@
+{
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "hardhat": "^2.22.18",
+    "hardhat-contract-sizer": "^2.10.0",
+    "hardhat-gas-reporter": "^2.2.2",
+    "solhint": "^3.4.1"
+  },
+  "scripts": {
+    "security:slither": "slither contracts/",
+    "security:mythril": "myth analyze contracts/MyToken.sol",
+    "security:all": "npm run security:slither && npm run security:mythril",
+    "security:report": "node scripts/process-security-reports.js",
+    "lint": "solhint 'contracts/**/*.sol'",
+    "lint:fix": "solhint 'contracts/**/*.sol' --fix"
+  }
+}

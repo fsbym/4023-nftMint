@@ -1,0 +1,12 @@
+{
+  "remappings": [
+    "@openzeppelin/contracts/=node_modules/@openzeppelin/contracts/"
+  ],
+  "optimizer": {
+    "enabled": true,
+    "runs": 200
+  },
+  "solc": {
+    "version": "0.8.20"
+  }
+}
