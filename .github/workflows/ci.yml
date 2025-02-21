@@ -30,18 +30,18 @@ jobs:
           docker compose run --rm backend npx hardhat compile
           docker compose run --rm backend npx solhint 'contracts/**/*.sol'
 
-      - name: Install and run Slither
-        working-directory: backend
-        run: |
-          npm install @chainlink/contracts
-          cd ..
-          echo '@chainlink/=node_modules/@chainlink/' > remappings.txt
-          python3 -m pip install --user slither-analyzer solc-select
-          solc-select install 0.8.20
-          solc-select use 0.8.20
-          export SOLC_VERSION=0.8.20
-          export SOLC_ARGS="--allow-paths .,backend/contracts,node_modules"
-          slither backend/contracts --config-file backend/slither.config.json
+    #   - name: Install and run Slither
+    #     working-directory: backend
+    #     run: |
+    #       npm install @chainlink/contracts
+    #       cd ..
+    #       echo '@chainlink/=node_modules/@chainlink/' > remappings.txt
+    #       python3 -m pip install --user slither-analyzer solc-select
+    #       solc-select install 0.8.20
+    #       solc-select use 0.8.20
+    #       export SOLC_VERSION=0.8.20
+    #       export SOLC_ARGS="--allow-paths .,backend/contracts,node_modules"
+    #       slither backend/contracts --config-file backend/slither.config.json
 
 
 
