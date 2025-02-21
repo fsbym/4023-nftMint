@@ -36,7 +36,8 @@ jobs:
           solc-select install 0.8.20
           solc-select use 0.8.20
           export SOLC_VERSION=0.8.20
-          slither backend/contracts --solc-allow-paths .,backend/contracts,node_modules --config-file backend/slither.config.json
+          export SOLC_ARGS="--allow-paths .,backend/contracts,node_modules"
+          slither backend/contracts --config-file backend/slither.config.json
 
 
 
