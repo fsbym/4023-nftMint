@@ -14,7 +14,18 @@ const MYTOKEN_CONTRACT_ADDRESS = "0x1AaD2aeD79C4f3698f05e969187A9b830f2E049C";
 function App() {
   const [currentAccount, setCurrentAccount] = useState(null);
   const [message, setMessage] = useState("");
+  const [addresses, setAddresses] = useState(null);
   const [isRandomNumberReady, setIsRandomNumberReady] = useState(false);
+
+  useEffect(() => {
+    fetch("/contractAddresses.json")
+      .then((res) => res.json())
+      .then((data) => {
+        setAddresses(data);
+        console.log("Loaded contract addresses:", data);
+      })
+      .catch((err) => console.error("Failed to load contract addresses:", err));
+  }, []);
 
   const checkWalletIsConnected = async () => {
     try {
@@ -71,11 +82,11 @@ function App() {
 
   const checkRandomNumberReady = async (provider) => {
     try {
-      const vrfContract = new Contract(
-        VRFD5_CONTRACT_ADDRESS,
-        vrfAbi,
-        provider
-      );
+      if (!addresses) {
+        setMessage("🔄 Loading contract addresses...");
+        return;
+      }
+      const vrfContract = new Contract(addresses.VRFD5, vrfAbi, provider);
       const randomNumber = await vrfContract.s_result();
 
       if (randomNumber.toString() !== "0" && randomNumber.toString() !== "42") {
@@ -94,10 +105,14 @@ function App() {
 
   const mintWithRandomFlowHandler = async () => {
     try {
+      if (!addresses) {
+        setMessage("⚠️ Contract addresses not loaded yet.");
+        return;
+      }
       setMessage("🔄 Requesting random number...");
       const provider = new BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
-      const vrfContract = new Contract(VRFD5_CONTRACT_ADDRESS, vrfAbi, signer);
+      const vrfContract = new Contract(addresses.VRFD5, vrfAbi, signer);
 
       const txRequest = await vrfContract.requestNumber();
       setMessage(`🔄 Random number request tx sent: ${txRequest.hash}`);
@@ -113,7 +128,7 @@ function App() {
         const metadata = await vrfContract.getMetadata();
 
         const myTokenContract = new Contract(
-          MYTOKEN_CONTRACT_ADDRESS,
+          addresses.MyToken,
           myTokenAbi,
           signer
         );
@@ -137,7 +152,7 @@ function App() {
 
   useEffect(() => {
     checkWalletIsConnected();
-  }, []);
+  }, [addresses]);
 
   return (
     <div className="main-app">

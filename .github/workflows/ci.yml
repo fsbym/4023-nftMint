@@ -32,10 +32,12 @@ jobs:
 
       - name: Install and run Slither
         run: |
-          python3 -m pip install --user slither-analyzer
+          python3 -m pip install --user slither-analyzer solc-select
+          solc-select install 0.8.20
+          solc-select use 0.8.20
           export SOLC_VERSION=0.8.20
           slither backend/contracts --config-file backend/slither.config.json
-          
+
 
 
       - name: Build and test frontend
@@ -95,3 +97,15 @@ jobs:
         run: |
           echo "MyToken deployed successfully to $MYTOKEN_CONTRACT_ADDRESS"
           echo "VRFD5 deployed successfully to $VRFD5_CONTRACT_ADDRESS"
+
+      - name: Create Frontend Contract Addresses File
+        run: |
+          cat <<EOF > frontend/public/contractAddresses.json
+          {
+              "VRFD5": "${{ env.VRFD5_CONTRACT_ADDRESS }}",
+              "MyToken": "${{ env.MYTOKEN_CONTRACT_ADDRESS }}"
+          }
+          EOF
+        
+
+        
