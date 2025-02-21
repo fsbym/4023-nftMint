@@ -19,7 +19,7 @@ module.exports = {
   networks: {
     sepolia: {
       url: process.env.ALCHEMY_SEPOLIA_URL,
-      accounts: [process.env.PRIVATE_KEY],
+      accounts: [`0x${process.env.PRIVATE_KEY}`],
     },
   },
   gasReporter: {
